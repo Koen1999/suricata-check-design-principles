@@ -8,18 +8,18 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import suricata_check_extension_example
+import suricata_check_design_principles
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "suricata-check-extension-example"
+project = "suricata-check-design-principles"
 copyright = "2024, Koen Teuwen"
 author = "Koen Teuwen"
 
 # Version / release information
-version = suricata_check_extension_example.__version__
-release = suricata_check_extension_example.__version__
+version = suricata_check_design_principles.__version__
+release = suricata_check_design_principles.__version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -40,6 +40,10 @@ intersphinx_mapping = {
     "sphinx": ("https://www.sphinx-doc.org/en/master", None),
     "suricata-check": ("https://suricata-check.teuwen.net/", None),
     "idstools": ("https://idstools.readthedocs.io/en/latest/", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+    "sklearn": ("https://scikit-learn.org/stable", None),
+    "pandas": ("https://pandas.pydata.org/docs", None),
+    "xgboost": ("https://xgboost.readthedocs.io/en/stable/", None),
 }
 
 root_doc = "index"
@@ -63,7 +67,7 @@ html_favicon = "https://docs.readthedocs.io/favicon.ico"
 myst_enable_extensions = ["linkify"]
 myst_heading_anchors = 5
 
-autoapi_dirs = ["../suricata_check_extension_example"]
+autoapi_dirs = ["../suricata_check_design_principles"]
 autoapi_options = [
     "members",
     "show-inheritance",

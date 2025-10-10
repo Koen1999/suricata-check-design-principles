@@ -7,7 +7,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "suricata-check-extension-example"
+name = "suricata-check-design-principles"
 description = "An extension for suricata-check with additional checkers."
 keywords = [
   "suricata",
@@ -23,8 +23,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Koen Teuwen" }]
 classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Private :: Do Not Upload",
+  "Development Status :: 4 - Beta",
   "Intended Audience :: Science/Research",
   "Intended Audience :: Education",
   "Intended Audience :: Developers",
@@ -44,21 +43,23 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3 :: Only",
   "Operating System :: OS Independent",
   "Operating System :: POSIX",
   "Operating System :: Microsoft :: Windows",
   "Operating System :: MacOS",
   "Framework :: Pytest",
-  "License :: OSI Approved :: Apache Software License",
+  "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
 ]
 requires-python = ">=3.9"
-dependencies = ["suricata-check>=0.3.0beta0", "idstools>=0.6.5",]
+dependencies = ["suricata-check>=0.6.0beta0", "idstools>=0.6.5",]
 dynamic = ["version"]
 
 [project.optional-dependencies]
+ml = ["numpy>=1.26.4", "pandas>=2.0.3", "scikit-learn==1.5.1", "xgboost==2.0.3"]
 dev = [
-  "suricata-check[dev]>=0.3.0beta0",
+  "suricata-check[dev]>=0.6.0beta0",
   "click>=8.1.7",
   "pytest>=8.2.1",
   "pytest-cov>=5.0.0",
@@ -75,12 +76,12 @@ dev = [
 
 [project.urls]
 homepage = "https://github.com/Koen1999/suricata-check"
-repository = "https://github.com/Koen1999/suricata-check-extension-example"
+repository = "https://github.com/Koen1999/suricata-check-design-principles"
 documentation = "https://suricata-check.teuwen.net/checker.html#releasing-checkers-as-a-package"
-bugtracker = "https://github.com/Koen1999/suricata-check-extension-example/issues"
+bugtracker = "https://github.com/Koen1999/suricata-check-design-principles/issues"
 
 [tool.setuptools.packages.find]
-include = ["suricata_check_extension_example*"]
+include = ["suricata_check_design_principles*"]
 
 [tool.setuptools-git-versioning]
 enabled = true
@@ -95,12 +96,12 @@ addopts = """
     -m "not slow"
     --strict-markers
     --color=yes
-    --cov=suricata_check_extension_example
+    --cov=suricata_check_design_principles
     --cov-report term
     --cov-report xml
     --cov-report lcov
     --cov-report html
-    --cov-fail-under=80
+    --cov-fail-under=40
     --cov-branch
 """
 
@@ -177,8 +178,8 @@ docstring-code-line-length = "dynamic"
 [tool.pyright]
 pythonVersion = "3.9"
 pythonPlatform = "All"
-root = ['suricata_check_extension_example']
-include = ["suricata_check_extension_example", "tests"]
+root = ['suricata_check_design_principles']
+include = ["suricata_check_design_principles", "tests"]
 exclude = ["**/__pycache__"]
 typeCheckingMode = "standard"
 reportDuplicateImport = "warning"

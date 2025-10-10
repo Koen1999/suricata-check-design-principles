@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", module="suricata_check.")
 import suricata_check
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import suricata_check_extension_example
+import suricata_check_design_principles
 
 _regex_provider = suricata_check.utils.regex.get_regex_provider()
 
@@ -86,7 +86,7 @@ def test_get_checkers():
     for checker in checkers:
         if (
             checker.__class__.__name__
-            == suricata_check_extension_example.checkers.ExampleChecker.__name__
+            == suricata_check_design_principles.checkers.PrincipleChecker.__name__
         ):
             return
 
@@ -97,7 +97,7 @@ def test_version():
     logging.basicConfig(level=logging.DEBUG)
     if not hasattr(suricata_check, "__version__"):
         pytest.fail("suricata_check has no attribute __version__")
-    from suricata_check._version import __version__
+    from suricata_check._version import __version__  # noqa: RUF100, PLC0415
 
     if __version__ == "unknown":
         warnings.warn(RuntimeWarning("Version is unknown."))
