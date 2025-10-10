@@ -29,10 +29,10 @@
             ]
         },
         {
-            "name": "Install Suricata-check-extension-example",
+            "name": "Install suricata-check-design-principles",
             "type": "debugpy",
             "request": "launch",
-            "cwd": "${workspaceFolder}/suricata-check-extension-example",
+            "cwd": "${workspaceFolder}/suricata-check-design-principles",
             "module": "pip",
             "args": [
                 "install",
@@ -78,6 +78,50 @@
                 "-m",
                 "slow or not slow",
                 "--cov-fail-under=0"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "subProcess": true,
+            "stopOnEntry": false,
+            "autoReload": {
+                "enable": false
+            },
+        },
+        {
+            "name": "Pytest: Train Principle ML",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-k",
+                "test_train_principle_ml",
+                
+                "-m",
+                "slow or not slow",
+                "--cov-fail-under=0",
+                "-s"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "subProcess": true,
+            "stopOnEntry": false,
+            "autoReload": {
+                "enable": false
+            },
+        },
+        {
+            "name": "Pytest: Cross-Evaluate Principle ML",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-k",
+                "test_precision_recall",
+                
+                "-m",
+                "slow or not slow",
+                "--cov-fail-under=0",
+                "-s"
             ],
             "console": "integratedTerminal",
             "justMyCode": false,

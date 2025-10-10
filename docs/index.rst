@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to suricata-check-extension-example's documentation!
+Welcome to suricata-check-design-principles's documentation!
 ============================================================
 
 .. toctree::
@@ -17,7 +17,7 @@ Welcome to suricata-check-extension-example's documentation!
    :maxdepth: 5
    :titlesonly:
 
-   autoapi/suricata_check_extension_example/index
+   autoapi/suricata_check_design_principles/index
 
 .. toctree::
    :caption: Indices and tables
