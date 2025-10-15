@@ -1,7 +1,7 @@
 # The `suricata-check` project - Design Principles
 
 [![Static Badge](https://img.shields.io/badge/docs-suricata--check-blue)](https://suricata-check-design-principles.teuwen.net/)
-[![Python Version](https://img.shields.io/pypi/pyversions/suricata-check-design-principles)](https://pypi.org/project/suricata-check)-design-principles
+[![Python Version](https://img.shields.io/pypi/pyversions/suricata-check-design-principles)](https://pypi.org/project/suricata-check-design-principles)
 [![PyPI](https://img.shields.io/pypi/status/suricata-check-design-principles)](https://pypi.org/project/suricata-check-design-principles)
 [![GitHub License](https://img.shields.io/github/license/Koen1999/suricata-check-design-principles)](https://github.com/Koen1999/suricata-check-design-principles/blob/master/LICENSE)
 
