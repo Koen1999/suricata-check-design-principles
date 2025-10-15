@@ -30,6 +30,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx_click",
+    "sphinx_sitemap",
 ]
 
 templates_path = ["_templates"]
@@ -59,7 +60,10 @@ html_theme_options = {
     "prev_next_buttons_location": "both",
     "style_external_links": True,
 }
+html_static_path = ["static"]
 html_favicon = "https://docs.readthedocs.io/favicon.ico"
+
+html_js_files = ["js/script.js"]
 
 # -- Options for MyST     -------------------------------------------------
 # https://myst-parser.readthedocs.io/en/latest/
@@ -84,3 +88,12 @@ autoapi_own_page_level = "module"
 # https://www.sphinx-doc.org/en/master/usage/extensions/viewcode.html
 
 viewcode_line_numbers = True
+
+# -- Options for sphinx-sitemap    -------------------------------------------------
+# https://sphinx-sitemap.readthedocs.io/en/latest/index.html
+
+html_baseurl = "https://suricata-check.teuwen.net/"
+sitemap_url_scheme = "{link}"
+sitemap_locales = ["en"]
+sitemap_excludes = ["search.html", "genindex.html"]
+html_extra_path = ["robots.txt"]
