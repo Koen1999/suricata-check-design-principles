@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: https://suricata-check-design-principles.teuwen.net/sitemap.xml
