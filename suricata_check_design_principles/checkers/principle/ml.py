@@ -8,7 +8,7 @@ from collections import Counter
 from collections.abc import Iterable
 from typing import Any, Literal, Optional, Union, overload
 
-import idstools.rule
+import suricata_check
 import xgboost
 from pandas import DataFrame, Series
 from sklearn.metrics import f1_score, make_scorer, precision_score, recall_score
@@ -19,6 +19,7 @@ from sklearn.model_selection import (
 )
 from sklearn.pipeline import Pipeline
 from suricata_check.checkers.interface.checker import CheckerInterface
+from suricata_check.rule import Rule
 from suricata_check.utils.checker import get_rule_option, get_rule_suboptions
 from suricata_check.utils.checker_typing import ISSUES_TYPE, Issue
 
@@ -189,7 +190,7 @@ class PrincipleMLChecker(CheckerInterface):
 
     def _check_rule(
         self: "PrincipleMLChecker",
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> ISSUES_TYPE:
         issues: ISSUES_TYPE = []
 
@@ -335,14 +336,14 @@ class PrincipleMLChecker(CheckerInterface):
     def _get_train_df(self: "PrincipleMLChecker", rules: Iterable[str]) -> DataFrame:
         feature_vectors = []
         for rule in rules:
-            parsed_rule = idstools.rule.parse(rule)
+            parsed_rule = suricata_check.rule.parse(rule)
             assert parsed_rule is not None
             feature_vectors.append(self._get_features(parsed_rule, False))
 
         return DataFrame(feature_vectors)
 
     def _get_raw_features(  # noqa: C901
-        self: "PrincipleMLChecker", rule: idstools.rule.Rule
+        self: "PrincipleMLChecker", rule: Rule
     ) -> Series:
         d: dict[str, Optional[Union[str, int]]] = {
             "proto": get_rule_option(rule, "proto")
@@ -436,13 +437,13 @@ class PrincipleMLChecker(CheckerInterface):
 
     @overload
     def _get_features(
-        self: "PrincipleMLChecker", rule: idstools.rule.Rule, frame: Literal[True]
+        self: "PrincipleMLChecker", rule: Rule, frame: Literal[True]
     ) -> DataFrame:
         pass
 
     @overload
     def _get_features(
-        self: "PrincipleMLChecker", rule: idstools.rule.Rule, frame: Literal[False]
+        self: "PrincipleMLChecker", rule: Rule, frame: Literal[False]
     ) -> Series:
         pass
 
@@ -459,7 +460,7 @@ class PrincipleMLChecker(CheckerInterface):
         return features_frame
 
     def _get_features(
-        self: "PrincipleMLChecker", rule: idstools.rule.Rule, frame: bool
+        self: "PrincipleMLChecker", rule: Rule, frame: bool
     ) -> Union[Series, DataFrame]:
         features: Series = self._get_raw_features(rule)
         features = self._preprocess_features(features)
