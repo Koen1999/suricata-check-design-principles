@@ -2,7 +2,6 @@ import logging
 import os
 import sys
 
-import idstools.rule
 import numpy
 import pandas
 import pytest
@@ -61,7 +60,7 @@ class TestPrincipleML(suricata_check.tests.GenericChecker):
             # Silently skip and succeed the test
             return
 
-        rule = idstools.rule.parse(raw_rule)
+        rule = suricata_check.rule.parse(raw_rule)
 
         # fail is false, so we do permit False Negatives
         self._test_issue(rule, code, expected, fail=False)
@@ -77,7 +76,7 @@ class TestPrincipleML(suricata_check.tests.GenericChecker):
     )
     @pytest.hookimpl(trylast=True)
     def test_rule_good(self, code, expected, raw_rule):
-        rule = idstools.rule.parse(raw_rule)
+        rule = suricata_check.rule.parse(raw_rule)
 
         # fail is true, so we do not permit False Positives
         self._test_issue(rule, code, expected, fail=False)
@@ -95,7 +94,7 @@ class TestPrincipleML(suricata_check.tests.GenericChecker):
         principle_rules = pandas.read_csv(NON_LABELLED_PUBLIC_RULES_PATH)
         principle_rules["group"] = principle_rules["rule.rule"].apply(
             lambda x: suricata_check.utils.checker.get_rule_suboption(
-                idstools.rule.parse(x), "metadata", "mitre_technique_id"  # type: ignore reportArgumentType
+                suricata_check.rule.parse(x), "metadata", "mitre_technique_id"  # type: ignore reportArgumentType
             )
         )
 
@@ -120,7 +119,7 @@ class TestPrincipleML(suricata_check.tests.GenericChecker):
             ):
                 y_pred_list = []
                 for rule in principle_rules_test["rule.rule"]:
-                    parsed_rule = idstools.rule.parse(rule)
+                    parsed_rule = suricata_check.rule.parse(rule)
                     y_pred_list.append(self.check_issue(parsed_rule, code, True)[0])
 
                 y_true = numpy.array(principle_rules_test[test_col].to_numpy() == 0)

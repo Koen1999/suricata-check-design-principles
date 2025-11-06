@@ -3,8 +3,8 @@
 import logging
 from typing import Optional
 
-import idstools.rule
 from suricata_check.checkers.interface.checker import CheckerInterface
+from suricata_check.rule import Rule
 from suricata_check.utils.checker import (
     count_rule_options,
     get_rule_option,
@@ -84,7 +84,7 @@ class PrincipleChecker(CheckerInterface):
 
     def _check_rule(
         self: "PrincipleChecker",
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> ISSUES_TYPE:
         issues: ISSUES_TYPE = []
 
@@ -161,7 +161,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __is_rule_initiated_internally(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> Optional[bool]:
         if get_rule_option(rule, "proto") in ("ip",):
             return None
@@ -197,7 +197,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __does_rule_account_for_server_response(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> Optional[bool]:
         if get_rule_option(rule, "proto") in ("ip",):
             return None
@@ -216,7 +216,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __does_rule_account_for_internal_content(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> bool:
         source_addr = get_rule_option(rule, "source_addr")
         assert source_addr is not None
@@ -230,7 +230,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __is_rule_stateful(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> Optional[bool]:
         if (
             is_rule_option_equal_to_regex(rule, "flowbits", _BITS_ISSET_REGEX)
@@ -251,7 +251,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __is_rule_threshold_limited(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> bool:
         value = get_rule_option(rule, "threshold")
 
@@ -265,7 +265,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __does_rule_have_exceptions(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> bool:
         positive_matches = 0
         negative_matches = 0
@@ -291,7 +291,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __has_fixed_http_uri_query_parameter_location(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> bool:
         if count_rule_options(rule, "content") != 1:
             return False
@@ -304,7 +304,7 @@ class PrincipleChecker(CheckerInterface):
 
     @staticmethod
     def __has_single_match_at_fixed_location(
-        rule: idstools.rule.Rule,
+        rule: Rule,
     ) -> bool:
         if (
             count_rule_options(rule, "content") == 2  # noqa: PLR2004
