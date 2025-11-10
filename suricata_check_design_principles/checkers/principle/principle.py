@@ -4,7 +4,6 @@ import logging
 from typing import Optional
 
 from suricata_check.checkers.interface.checker import CheckerInterface
-from suricata_check.rule import Rule
 from suricata_check.utils.checker import (
     count_rule_options,
     get_rule_option,
@@ -23,9 +22,10 @@ from suricata_check.utils.regex import (
     OTHER_PAYLOAD_KEYWORDS,
     SIZE_KEYWORDS,
     get_options_regex,
-    get_regex_provider,
     get_rule_body,
 )
+from suricata_check.utils.regex_provider import get_regex_provider
+from suricata_check.utils.rule import Rule
 
 from suricata_check_design_principles.checkers.principle._utils import get_message
 
