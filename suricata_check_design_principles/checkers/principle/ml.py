@@ -19,9 +19,9 @@ from sklearn.model_selection import (
 )
 from sklearn.pipeline import Pipeline
 from suricata_check.checkers.interface.checker import CheckerInterface
-from suricata_check.rule import Rule
 from suricata_check.utils.checker import get_rule_option, get_rule_suboptions
 from suricata_check.utils.checker_typing import ISSUES_TYPE, Issue
+from suricata_check.utils.rule import Rule
 
 from suricata_check_design_principles._version import SURICATA_CHECK_DIR
 from suricata_check_design_principles.checkers.principle._utils import get_message
@@ -336,7 +336,7 @@ class PrincipleMLChecker(CheckerInterface):
     def _get_train_df(self: "PrincipleMLChecker", rules: Iterable[str]) -> DataFrame:
         feature_vectors = []
         for rule in rules:
-            parsed_rule = suricata_check.rule.parse(rule)
+            parsed_rule = suricata_check.utils.rule.parse(rule)
             assert parsed_rule is not None
             feature_vectors.append(self._get_features(parsed_rule, False))
 
@@ -349,33 +349,33 @@ class PrincipleMLChecker(CheckerInterface):
             "proto": get_rule_option(rule, "proto")
         }
 
-        options = rule["options"]
+        options = rule.options
 
         for option in options:
-            d[option["name"]] = option["value"]
+            d[option.name] = option.value
 
-        counter = Counter([option["name"] for option in options])
+        counter = Counter([option.name for option in options])
         for option, count in counter.items():
             d[option + ".count"] = count
 
         for option in options:
-            if option["name"] not in self.splittable_features:
+            if option.name not in self.splittable_features:
                 continue
 
             suboptions = [
                 {"name": k, "value": v}
-                for k, v in get_rule_suboptions(rule, option["name"], warn=False)
+                for k, v in get_rule_suboptions(rule, option.name, warn=False)
             ]
 
             if len(suboptions) == 0:
                 continue
 
             for suboption in suboptions:
-                d[option["name"] + "." + suboption["name"]] = suboption["value"]
+                d[option.name + "." + suboption["name"]] = suboption["value"]
 
             counter = Counter([suboption["name"] for suboption in suboptions])
             for suboption, count in counter.items():
-                d[option["name"] + "." + suboption + ".count"] = count
+                d[option.name + "." + suboption + ".count"] = count
 
         msg = get_rule_option(rule, "msg")
         assert msg is not None
@@ -465,7 +465,7 @@ class PrincipleMLChecker(CheckerInterface):
         features: Series = self._get_raw_features(rule)
         features = self._preprocess_features(features)
 
-        features["custom.negated.count"] = rule["raw"].count(':!"')
+        features["custom.negated.count"] = rule.raw.count(':!"')
 
         if self._dtypes is None:
             return features

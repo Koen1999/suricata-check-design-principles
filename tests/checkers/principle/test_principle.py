@@ -162,7 +162,7 @@ class TestPrinciple(suricata_check.tests.GenericChecker):
             # Silently skip and succeed the test
             return
 
-        rule = suricata_check.rule.parse(raw_rule)
+        rule = suricata_check.utils.rule.parse(raw_rule)
 
         # fail is false, so we do permit False Negatives
         self._test_issue(rule, code, expected, fail=False)
@@ -177,7 +177,7 @@ class TestPrinciple(suricata_check.tests.GenericChecker):
         ],
     )
     def test_rule_good(self, code, expected, raw_rule):
-        rule = suricata_check.rule.parse(raw_rule)
+        rule = suricata_check.utils.rule.parse(raw_rule)
 
         # fail is true, so we do not permit False Positives
         self._test_issue(rule, code, expected, fail=True)
@@ -197,7 +197,7 @@ class TestPrinciple(suricata_check.tests.GenericChecker):
         ):
             y_pred_list = []
             for rule in principle_rules["rule.rule"]:
-                parsed_rule = suricata_check.rule.parse(rule)
+                parsed_rule = suricata_check.utils.rule.parse(rule)
                 y_pred_list.append(self.check_issue(parsed_rule, code, True)[0])
 
             y_true = numpy.array(principle_rules[test_col].to_numpy() == 0)
