@@ -2,7 +2,7 @@ var script = document.createElement("script");
 
 script.setAttribute("async", "");
 script.setAttribute("src", "https://umami.suricata-check.teuwen.net/script.js");
-script.setAttribute("data-website-id", "29b9bc19-67b0-414d-98d2-ea099ec5149a");
+script.setAttribute("data-website-id", "c302c87d-bf3a-4c62-8b6b-8a17d7bf20d4");
 script.setAttribute("data-do-not-track", "true");
 script.setAttribute("data-domains", "suricata-check-design-principles.teuwen.net");
 
