@@ -91,7 +91,7 @@ viewcode_line_numbers = True
 # -- Options for sphinx-sitemap    -------------------------------------------------
 # https://sphinx-sitemap.readthedocs.io/en/latest/index.html
 
-html_baseurl = "https://suricata-check.teuwen.net/"
+html_baseurl = "https://suricata-check-design-principles.teuwen.net/"
 sitemap_url_scheme = "{link}"
 sitemap_locales = ["en"]
 sitemap_excludes = ["search.html", "genindex.html"]
