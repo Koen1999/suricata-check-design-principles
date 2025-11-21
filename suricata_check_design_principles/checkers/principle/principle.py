@@ -3,7 +3,7 @@
 import logging
 from typing import Optional
 
-from suricata_check.checkers.interface.checker import CheckerInterface
+from suricata_check.checkers.interface import CheckerInterface
 from suricata_check.utils.checker import (
     count_rule_options,
     get_rule_option,

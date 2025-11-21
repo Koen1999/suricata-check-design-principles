@@ -5,7 +5,7 @@ Based on the Ruling the Unruly paper.
 Reference: TODO
 """
 
-from suricata_check.checkers.interface.dummy import DummyChecker
+from suricata_check.checkers.interface import DummyChecker
 
 from suricata_check_design_principles.checkers.principle.principle import (
     PrincipleChecker,

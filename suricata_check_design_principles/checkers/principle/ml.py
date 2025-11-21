@@ -18,7 +18,7 @@ from sklearn.model_selection import (
     cross_val_score,
 )
 from sklearn.pipeline import Pipeline
-from suricata_check.checkers.interface.checker import CheckerInterface
+from suricata_check.checkers.interface import CheckerInterface
 from suricata_check.utils.checker import get_rule_option, get_rule_suboptions
 from suricata_check.utils.checker_typing import ISSUES_TYPE, Issue
 from suricata_check.utils.rule import Rule
