@@ -1,9 +1,10 @@
 """`PrincipleChecker`."""
 
 import logging
+from types import MappingProxyType
 from typing import Optional
 
-from suricata_check.checkers.interface.checker import CheckerInterface
+from suricata_check.checkers.interface import CheckerInterface
 from suricata_check.utils.checker import (
     count_rule_options,
     get_rule_option,
@@ -38,13 +39,15 @@ _FLOWINT_ISNOTSET_REGEX = _regex_provider.compile(r"^.*,\s*isnotset\s*,.*$")
 _THRESHOLD_LIMITED_REGEX = _regex_provider.compile(r"^.*type\s+(limit|both).*$")
 _FLOWBITS_ISNOTSET_REGEX = _regex_provider.compile(r"^\s*isnotset.*$")
 _HTTP_URI_QUERY_PARAMETER_REGEX = _regex_provider.compile(
-    rf"^\(.*\s+http\.uri\s*;\s*content\s*:\s*\"[^\"]*\?([^\"]|\\\")+\"\s*;((?!.*{get_options_regex(CONTENT_KEYWORDS).pattern}).*)|((?!.*{get_options_regex(CONTENT_KEYWORDS).pattern}).*\s+{get_options_regex(BUFFER_KEYWORDS).pattern}\s*;.*)\)$"
+    rf"^\(.*\s+http\.uri\s*;\s*content\s*:\s*\"[^\"]*\?([^\"]|\\\")+\"\s*;((?!.*{get_options_regex(CONTENT_KEYWORDS).pattern}).*)|((?!.*{get_options_regex(CONTENT_KEYWORDS).pattern}).*\s+{get_options_regex(BUFFER_KEYWORDS).pattern}\s*;.*)\)$",
 )
 _PROXY_MSG_REGEX = _regex_provider.compile(
-    r"^.*(Suspicious).*$", flags=_regex_provider.IGNORECASE
+    r"^.*(Suspicious).*$",
+    flags=_regex_provider.IGNORECASE,
 )
 _SPECIFIC_MSG_REGEX = _regex_provider.compile(
-    r"^.*(CVE|Vulnerability).*$", flags=_regex_provider.IGNORECASE
+    r"^.*(CVE|Vulnerability).*$",
+    flags=_regex_provider.IGNORECASE,
 )
 
 
@@ -73,14 +76,16 @@ class PrincipleChecker(CheckerInterface):
         that and is unlikely to generalize as a result.
     """
 
-    codes = {
-        "P000": {"severity": logging.INFO},
-        "P001": {"severity": logging.INFO},
-        "P002": {"severity": logging.INFO},
-        "P003": {"severity": logging.INFO},
-        "P004": {"severity": logging.INFO},
-        "P005": {"severity": logging.INFO},
-    }
+    codes = MappingProxyType(
+        {
+            "P000": {"severity": logging.INFO},
+            "P001": {"severity": logging.INFO},
+            "P002": {"severity": logging.INFO},
+            "P003": {"severity": logging.INFO},
+            "P004": {"severity": logging.INFO},
+            "P005": {"severity": logging.INFO},
+        }
+    )
 
     def _check_rule(
         self: "PrincipleChecker",
@@ -89,7 +94,8 @@ class PrincipleChecker(CheckerInterface):
         issues: ISSUES_TYPE = []
 
         if count_rule_options(
-            rule, ALL_DETECTION_KEYWORDS
+            rule,
+            ALL_DETECTION_KEYWORDS,
         ) == 0 or is_rule_option_equal_to_regex(rule, "msg", _PROXY_MSG_REGEX):
             issues.append(
                 Issue(
@@ -148,7 +154,7 @@ class PrincipleChecker(CheckerInterface):
             )
 
         if self.__has_fixed_http_uri_query_parameter_location(
-            rule
+            rule,
         ) or self.__has_single_match_at_fixed_location(rule):
             issues.append(
                 Issue(
@@ -173,7 +179,9 @@ class PrincipleChecker(CheckerInterface):
             and IP_ADDRESS_REGEX.match(dest_addr) is None
         ):
             if is_rule_suboption_set(
-                rule, "flow", "from_server"
+                rule,
+                "flow",
+                "from_server",
             ) or is_rule_suboption_set(rule, "flow", "to_client"):
                 return True
 
@@ -184,7 +192,9 @@ class PrincipleChecker(CheckerInterface):
             and IP_ADDRESS_REGEX.match(source_addr) is None
         ):
             if is_rule_suboption_set(
-                rule, "flow", "to_server"
+                rule,
+                "flow",
+                "to_server",
             ) or is_rule_suboption_set(rule, "flow", "from_client"):
                 return True
             if is_rule_option_set(rule, "dns.query") or is_rule_option_set(
@@ -203,7 +213,9 @@ class PrincipleChecker(CheckerInterface):
             return None
 
         if is_rule_suboption_set(rule, "flow", "from_server") or is_rule_suboption_set(
-            rule, "flow", "to_client"
+            rule,
+            "flow",
+            "to_client",
         ):
             return True
 
@@ -317,7 +329,7 @@ class PrincipleChecker(CheckerInterface):
             return False
 
         contents = list(
-            set(get_rule_options(rule, "content")).difference(['"GET"', '"POST"'])
+            set(get_rule_options(rule, "content")).difference(['"GET"', '"POST"']),
         )
         if len(contents) != 1:
             return False

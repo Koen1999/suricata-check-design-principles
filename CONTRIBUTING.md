@@ -4,14 +4,13 @@ If you would like to contribute, below you can find some helpful suggestions and
 
 ## Installing from source
 
-To install `suricata-check` from source (potentially with local modifications), simply run the following commands:
+To install `suricata-check-design-principles` from source (potentially with local modifications), simply run the following commands:
 
 ```bash
 git clone https://github.com/Koen1999/suricata-check-design-principles
 cd suricata-check
-pip install -r requirements.txt
-pytest
 pip install .
+pytest
 ```
 
 ## Preparing the development environment
@@ -19,7 +18,9 @@ pip install .
 To install packages required for running tests and linting, run the following command:
 
 ```bash
-pip install -U -r requirements.txt
+pip install pip-tools
+pip-compile --all-extras -o requirements-dev.txt pyproject.toml
+pip install -r requirements-dev.txt
 ```
 
 ## Running tests
@@ -52,6 +53,20 @@ To automatically fix some linting issues and check for remaining issues, run the
 black .
 ruff check . --fix
 pyright
+```
+
+### Markdownlint
+
+If you made changes to `.md` file and want to lint them locally, you have to install `markdownlint` using `npm`.
+
+```bash
+npm install -g markdownlint-cli2
+```
+
+Now you can lint markdown files using to automatically detect all issues and fix some:
+
+```bash
+markdownlint-cli2 --fix "**/*.md"
 ```
 
 ## Docs

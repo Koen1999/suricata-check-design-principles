@@ -26,8 +26,8 @@ def get_version() -> str:
 
             v = str(
                 setuptools_git_versioning.get_version(
-                    root=os.path.join(SURICATA_CHECK_DIR, "..")
-                )
+                    root=os.path.join(SURICATA_CHECK_DIR, ".."),
+                ),
             )
             _logger.debug(
                 "Detected suricata-check-design-principles version using setuptools_git_versioning: %s",
@@ -54,3 +54,4 @@ def get_version() -> str:
 
 
 __version__: str = get_version()
+"""The version of the `suricata-check-design-principles` module being executed."""

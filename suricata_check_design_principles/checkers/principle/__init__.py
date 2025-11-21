@@ -2,17 +2,17 @@
 
 Based on the Ruling the Unruly paper.
 
-Reference: TODO
+Reference: https://koen.teuwen.net/publication/ruling-the-unruly
 """
 
 from suricata_check.checkers.interface.dummy import DummyChecker
 
-from suricata_check_design_principles.checkers.principle.principle import (
+from suricata_check_design_principles.checkers.principle._principle import (
     PrincipleChecker,
 )
 
 try:
-    from suricata_check_design_principles.checkers.principle.ml import PrincipleMLChecker  # type: ignore reportAssignmentType
+    from suricata_check_design_principles.checkers.principle._ml import PrincipleMLChecker  # type: ignore reportAssignmentType
 except ImportError:
 
     class PrincipleMLChecker(DummyChecker):

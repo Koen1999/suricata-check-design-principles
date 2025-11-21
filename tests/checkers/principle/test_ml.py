@@ -14,7 +14,7 @@ from .test_principle import RULES as P_RULES
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 import suricata_check_design_principles
 
-CHECKER_CLASS = suricata_check_design_principles.checkers.PrincipleMLChecker
+CHECKER_CLASS = suricata_check_design_principles.checkers.principle.PrincipleMLChecker
 
 RULES = P_RULES.copy()
 for rule in P_RULES.keys():
@@ -94,8 +94,10 @@ class TestPrincipleML(suricata_check.tests.GenericChecker):
         principle_rules = pandas.read_csv(NON_LABELLED_PUBLIC_RULES_PATH)
         principle_rules["group"] = principle_rules["rule.rule"].apply(
             lambda x: suricata_check.utils.checker.get_rule_suboption(
-                suricata_check.utils.rule.parse(x), "metadata", "mitre_technique_id"  # type: ignore reportArgumentType
-            )
+                suricata_check.utils.rule.parse(x),  # type: ignore reportArgumentType
+                "metadata",
+                "mitre_technique_id",
+            ),
         )
 
         for group in principle_rules["group"].unique():
@@ -126,10 +128,10 @@ class TestPrincipleML(suricata_check.tests.GenericChecker):
                 y_pred = numpy.array(y_pred_list)
 
                 precision = float(
-                    sklearn.metrics.precision_score(y_true, y_pred, zero_division=0)  # type: ignore reportArgumentType
+                    sklearn.metrics.precision_score(y_true, y_pred, zero_division=0),  # type: ignore reportArgumentType
                 )
                 recall = float(
-                    sklearn.metrics.recall_score(y_true, y_pred, zero_division=1)  # type: ignore reportArgumentType
+                    sklearn.metrics.recall_score(y_true, y_pred, zero_division=1),  # type: ignore reportArgumentType
                 )
 
                 fp_mask = ~y_true & y_pred
@@ -137,18 +139,20 @@ class TestPrincipleML(suricata_check.tests.GenericChecker):
 
                 for rule in principle_rules_test.loc[fp_mask, "rule.rule"]:
                     _logger.debug(
-                        "Code {} False Positive: {}".format(code, rule)  # noqa: G001
+                        "Code {} False Positive: {}".format(code, rule),  # noqa: G001
                     )
 
                 for rule in principle_rules_test.loc[fn_mask, "rule.rule"]:
                     _logger.debug(
-                        "Code {} False Negative: {}".format(code, rule)  # noqa: G001
+                        "Code {} False Negative: {}".format(code, rule),  # noqa: G001
                     )
 
                 _logger.info(
                     "Code {}\tPrecision: {}\tRecall: {}".format(  # noqa: G001
-                        code, precision, recall
-                    )
+                        code,
+                        precision,
+                        recall,
+                    ),
                 )
 
 
