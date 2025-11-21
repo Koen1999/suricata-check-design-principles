@@ -2,12 +2,10 @@
 
 from suricata_check_design_principles import checkers
 from suricata_check_design_principles._version import (
-    SURICATA_CHECK_DIR,
     __version__,
 )
 
 __all__ = (
-    "SURICATA_CHECK_DIR",
     "__version__",
     "checkers",
 )

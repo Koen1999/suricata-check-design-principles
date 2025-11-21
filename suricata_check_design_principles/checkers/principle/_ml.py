@@ -6,6 +6,7 @@ import os
 import pickle
 from collections import Counter
 from collections.abc import Iterable
+from types import MappingProxyType
 from typing import Any, Literal, Optional, Union, overload
 
 import suricata_check
@@ -18,7 +19,7 @@ from sklearn.model_selection import (
     cross_val_score,
 )
 from sklearn.pipeline import Pipeline
-from suricata_check.checkers.interface.checker import CheckerInterface
+from suricata_check.checkers.interface import CheckerInterface
 from suricata_check.utils.checker import get_rule_option, get_rule_suboptions
 from suricata_check.utils.checker_typing import ISSUES_TYPE, Issue
 from suricata_check.utils.rule import Rule
@@ -70,7 +71,7 @@ MSG_COLUMNS = ("msg.contains." + keyword for keyword in MSG_KEYWORDS)
 IP_KEYWORDS = ("$HOME_NET", "$HTTP_SERVERS", "$EXTERNAL_NET", "any")
 IP_COLUMNS = tuple(
     ["source_addr.contains." + keyword for keyword in IP_KEYWORDS]
-    + ["dest_addr.contains." + keyword for keyword in IP_KEYWORDS]
+    + ["dest_addr.contains." + keyword for keyword in IP_KEYWORDS],
 )
 
 
@@ -79,8 +80,8 @@ PIPELINE = Pipeline(
         (
             "classify",
             xgboost.XGBClassifier(),
-        )
-    ]
+        ),
+    ],
 )
 # https://shengyg.github.io/repository/machine%20learning/2017/02/25/Complete-Guide-to-Parameter-Tuning-xgboost.html
 PARAM_GRID: list[dict] = [
@@ -111,11 +112,17 @@ SCORER = make_scorer(
     / (
         PRECISION_WEIGHT / (precision_score(y, y_pred, zero_division=1) + 1e-10)  # type: ignore reportArgumentType
         + 1 / (recall_score(y, y_pred, zero_division=0) + 1e-10)  # type: ignore reportArgumentType
-    )
+    ),
 )
 SPLITTER = RepeatedStratifiedKFold(n_splits=2, n_repeats=10)
 GRIDSEARCHCV = GridSearchCV(
-    PIPELINE, PARAM_GRID, cv=SPLITTER, scoring=SCORER, error_score="raise", n_jobs=N_JOBS, verbose=1  # type: ignore reportArgumentType
+    PIPELINE,
+    PARAM_GRID,
+    cv=SPLITTER,
+    scoring=SCORER,
+    error_score="raise",
+    n_jobs=N_JOBS,
+    verbose=1,  # type: ignore reportArgumentType
 )
 
 
@@ -136,21 +143,23 @@ class PrincipleMLChecker(CheckerInterface):
     ip_keywords = IP_KEYWORDS
     ip_columns = IP_COLUMNS
 
-    codes = {
-        "Q000": {"severity": logging.INFO},
-        "Q001": {"severity": logging.INFO},
-        "Q002": {"severity": logging.INFO},
-        "Q003": {"severity": logging.INFO},
-        "Q004": {"severity": logging.INFO},
-        "Q005": {"severity": logging.INFO},
-    }
+    codes = MappingProxyType(
+        {
+            "Q000": {"severity": logging.INFO},
+            "Q001": {"severity": logging.INFO},
+            "Q002": {"severity": logging.INFO},
+            "Q003": {"severity": logging.INFO},
+            "Q004": {"severity": logging.INFO},
+            "Q005": {"severity": logging.INFO},
+        }
+    )
 
     enabled_by_default = (
         False  # Since the checker is relatively slow, it is disabled by default
     )
 
     _dtypes: Optional[dict[str, Any]] = None
-    _models: dict[str, Pipeline] = {}
+    _models: dict[str, Pipeline] = {}  # noqa: RUF012
 
     def __new__(
         cls: type["PrincipleMLChecker"],
@@ -203,7 +212,7 @@ class PrincipleMLChecker(CheckerInterface):
                     Issue(
                         code=code,
                         message=get_message(code),
-                    )
+                    ),
                 )
 
         return issues
@@ -295,7 +304,9 @@ class PrincipleMLChecker(CheckerInterface):
 
                 _logger.info("Code %s params: %s", code, gridsearchcv.best_params_)
                 _logger.info(
-                    "Code %s Weighted F1-score: %s", code, gridsearchcv.best_score_
+                    "Code %s Weighted F1-score: %s",
+                    code,
+                    gridsearchcv.best_score_,
                 )
 
                 self._models[code] = gridsearchcv.best_estimator_
@@ -343,10 +354,11 @@ class PrincipleMLChecker(CheckerInterface):
         return DataFrame(feature_vectors)
 
     def _get_raw_features(  # noqa: C901
-        self: "PrincipleMLChecker", rule: Rule
+        self: "PrincipleMLChecker",
+        rule: Rule,
     ) -> Series:
         d: dict[str, Optional[Union[str, int]]] = {
-            "proto": get_rule_option(rule, "proto")
+            "proto": get_rule_option(rule, "proto"),
         }
 
         options = rule.options
@@ -437,13 +449,17 @@ class PrincipleMLChecker(CheckerInterface):
 
     @overload
     def _get_features(
-        self: "PrincipleMLChecker", rule: Rule, frame: Literal[True]
+        self: "PrincipleMLChecker",
+        rule: Rule,
+        frame: Literal[True],
     ) -> DataFrame:
         pass
 
     @overload
     def _get_features(
-        self: "PrincipleMLChecker", rule: Rule, frame: Literal[False]
+        self: "PrincipleMLChecker",
+        rule: Rule,
+        frame: Literal[False],
     ) -> Series:
         pass
 
@@ -460,7 +476,9 @@ class PrincipleMLChecker(CheckerInterface):
         return features_frame
 
     def _get_features(
-        self: "PrincipleMLChecker", rule: Rule, frame: bool
+        self: "PrincipleMLChecker",
+        rule: Rule,
+        frame: bool,
     ) -> Union[Series, DataFrame]:
         features: Series = self._get_raw_features(rule)
         features = self._preprocess_features(features)

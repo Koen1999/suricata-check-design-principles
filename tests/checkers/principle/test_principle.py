@@ -11,7 +11,7 @@ import suricata_check
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 import suricata_check_design_principles
 
-CHECKER_CLASS = suricata_check_design_principles.checkers.PrincipleChecker
+CHECKER_CLASS = suricata_check_design_principles.checkers.principle.PrincipleChecker
 
 # These rules where mentioned in the Ruling the Unruly paper.
 # They originate from ET OPEN (https://rules.emergingthreats.net/OPEN_download_instructions.html)
@@ -204,10 +204,10 @@ class TestPrinciple(suricata_check.tests.GenericChecker):
             y_pred = numpy.array(y_pred_list)
 
             precision = float(
-                sklearn.metrics.precision_score(y_true, y_pred, zero_division=0)  # type: ignore reportArgumentType
+                sklearn.metrics.precision_score(y_true, y_pred, zero_division=0),  # type: ignore reportArgumentType
             )
             recall = float(
-                sklearn.metrics.recall_score(y_true, y_pred, zero_division=1)  # type: ignore reportArgumentType
+                sklearn.metrics.recall_score(y_true, y_pred, zero_division=1),  # type: ignore reportArgumentType
             )
 
             fp_mask = ~y_true & y_pred
@@ -215,18 +215,20 @@ class TestPrinciple(suricata_check.tests.GenericChecker):
 
             for rule in principle_rules.loc[fp_mask, "rule.rule"]:
                 _logger.debug(
-                    "Code {} False Positive: {}".format(code, rule)  # noqa: G001
+                    "Code {} False Positive: {}".format(code, rule),  # noqa: G001
                 )
 
             for rule in principle_rules.loc[fn_mask, "rule.rule"]:
                 _logger.debug(
-                    "Code {} False Negative: {}".format(code, rule)  # noqa: G001
+                    "Code {} False Negative: {}".format(code, rule),  # noqa: G001
                 )
 
             _logger.info(
                 "Code {}\tPrecision: {}\tRecall: {}".format(  # noqa: G001
-                    code, precision, recall
-                )
+                    code,
+                    precision,
+                    recall,
+                ),
             )
 
 

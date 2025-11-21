@@ -88,7 +88,7 @@ def test_get_checkers():
     for checker in checkers:
         if (
             checker.__class__.__name__
-            == suricata_check_design_principles.checkers.PrincipleChecker.__name__
+            == suricata_check_design_principles.checkers.principle.PrincipleChecker.__name__
         ):
             return
 
