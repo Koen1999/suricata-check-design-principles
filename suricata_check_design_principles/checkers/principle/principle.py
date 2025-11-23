@@ -1,7 +1,6 @@
 """`PrincipleChecker`."""
 
 import logging
-from typing import Optional
 
 from suricata_check.checkers.interface import CheckerInterface
 from suricata_check.utils.checker import (
@@ -162,7 +161,7 @@ class PrincipleChecker(CheckerInterface):
     @staticmethod
     def __is_rule_initiated_internally(
         rule: Rule,
-    ) -> Optional[bool]:
+    ) -> bool | None:
         if get_rule_option(rule, "proto") in ("ip",):
             return None
 
@@ -198,7 +197,7 @@ class PrincipleChecker(CheckerInterface):
     @staticmethod
     def __does_rule_account_for_server_response(
         rule: Rule,
-    ) -> Optional[bool]:
+    ) -> bool | None:
         if get_rule_option(rule, "proto") in ("ip",):
             return None
 
@@ -231,7 +230,7 @@ class PrincipleChecker(CheckerInterface):
     @staticmethod
     def __is_rule_stateful(
         rule: Rule,
-    ) -> Optional[bool]:
+    ) -> bool | None:
         if (
             is_rule_option_equal_to_regex(rule, "flowbits", _BITS_ISSET_REGEX)
             or is_rule_option_equal_to_regex(rule, "flowint", _FLOWINT_ISSET_REGEX)
