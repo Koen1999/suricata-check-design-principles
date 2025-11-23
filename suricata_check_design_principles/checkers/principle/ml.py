@@ -6,7 +6,7 @@ import os
 import pickle
 from collections import Counter
 from collections.abc import Iterable
-from typing import Any, Literal, Optional, Union, overload
+from typing import Any, Literal, overload
 
 import suricata_check
 import xgboost
@@ -149,12 +149,12 @@ class PrincipleMLChecker(CheckerInterface):
         False  # Since the checker is relatively slow, it is disabled by default
     )
 
-    _dtypes: Optional[dict[str, Any]] = None
+    _dtypes: dict[str, Any] | None = None
     _models: dict[str, Pipeline] = {}
 
     def __new__(
         cls: type["PrincipleMLChecker"],
-        filepath: Optional[str] = _PICKLE_PATH,
+        filepath: str | None = _PICKLE_PATH,
         *args: tuple,
         **kwargs: dict,
     ) -> "PrincipleMLChecker":
@@ -345,9 +345,7 @@ class PrincipleMLChecker(CheckerInterface):
     def _get_raw_features(  # noqa: C901
         self: "PrincipleMLChecker", rule: Rule
     ) -> Series:
-        d: dict[str, Optional[Union[str, int]]] = {
-            "proto": get_rule_option(rule, "proto")
-        }
+        d: dict[str, str | int | None] = {"proto": get_rule_option(rule, "proto")}
 
         options = rule.options
 
@@ -461,7 +459,7 @@ class PrincipleMLChecker(CheckerInterface):
 
     def _get_features(
         self: "PrincipleMLChecker", rule: Rule, frame: bool
-    ) -> Union[Series, DataFrame]:
+    ) -> Series | DataFrame:
         features: Series = self._get_raw_features(rule)
         features = self._preprocess_features(features)
 
