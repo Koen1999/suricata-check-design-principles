@@ -57,7 +57,7 @@ dependencies = ["suricata-check>=0.8.0beta0"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-ml = ["numpy>=2.2.6", "pandas>=2.3.3", "scikit-learn==1.7.2", "xgboost==3.1.2"]
+ml = ["numpy>=2.2.6", "pandas>=2.3.3,<3", "scikit-learn==1.7.2", "xgboost==3.1.2"]
 test = [
   "suricata-check[test]>=0.9.0beta0",
   "pytest>=8.0.0",
