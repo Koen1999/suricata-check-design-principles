@@ -6,7 +6,7 @@ import os
 import pickle
 from collections import Counter
 from collections.abc import Iterable
-from typing import Any, Literal, overload
+from typing import Any, Literal, Self, overload
 
 import suricata_check
 import xgboost
@@ -157,7 +157,7 @@ class PrincipleMLChecker(CheckerInterface):
         filepath: str | None = _PICKLE_PATH,
         *args: tuple,
         **kwargs: dict,
-    ) -> "PrincipleMLChecker":
+    ) -> Self:
         """Returns a new or unpickled instance of the class."""
         if filepath:
             if os.path.exists(filepath):
