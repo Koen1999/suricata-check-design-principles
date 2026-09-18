@@ -14,3 +14,4 @@ suricata-check-stats.log
 cov.*
 coverage.*
 htmlcov
+requirements-dev.txt
